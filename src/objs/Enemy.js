@@ -2,11 +2,13 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   //Dados para a criacao dos objetos do inimigos
   constructor(scene,x,y,player,obst) {
     //Implem. na Scene
-    super(scene,x,y,'enemy');
+    super(scene,x,y,'enemy-sprites');
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
     //Implem. das cariaveis de movimento
+    this.xInicial = x;
+    this.yInicial = y;
     this.player = player;
     this.obst = obst;
     this.speed = this.player.speed*2/3;
@@ -52,6 +54,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     //angleRad = Math.atan2(playerBody.position.y-body.position.y,playerBody.position.x-body.position.x);
     body.velocity.x += this.speed*Math.cos(angleRad); body.velocity.y += this.speed*Math.sin(angleRad);
+    this.anims.play('enemyAnim',true);
   }
   
   //Metodo para refrescar os dados do jogador
@@ -95,37 +98,37 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         //Obstaculo que colide com a parede do mapa pela esquerda
         if(target.y<=this.currentObst.getBounds().centerY){
           //Caso alvo esteja abaixo de obstaculo
-          angleAssist += 0.35;
+          angleAssist += 0.5;
         }else{
           //Caso alvo esteja acima de obstaculo
-          angleAssist -= 0.35;
+          angleAssist -= 0.5;
         }
       }else if(this.currentObst.getBounds().x+this.currentObst.getBounds().width>=this.gameWidth){
         //Obstaculo que colide com a parede do mapa pela direita
         if(target.y<=this.currentObst.getBounds().centerY){
           //Caso alvo esteja abaixo de obstaculo
-          angleAssist -= 0.35;
+          angleAssist -= 0.5;
         }else{
           //Caso alvo esteja acima de obstaculo
-          angleAssist += 0.35;
+          angleAssist += 0.5;
         }
       }else if(this.currentObst.getBounds().y<=0){
         //Obstaculo que colide com a parede do mapa em cima
         if(target.x<=this.currentObst.getBounds().centerX){
           //Caso alvo esteja a esquerda de obstaculo
-          angleAssist -= 0.35;
+          angleAssist -= 0.5;
         }else{
           //Caso alvo esteja a direita de obstaculo
-          angleAssist += 0.35;
+          angleAssist += 0.5;
         }
       }else if(this.currentObst.getBounds().y+this.currentObst.getBounds().height>=this.gameHeight){
         //Obstaculo que colide com a parede do mapa em baixo
         if(target.x<=this.currentObst.getBounds().centerX){
           //Caso alvo esteja a esquerda de obstaculo
-          angleAssist += 0.35;
+          angleAssist += 0.5;
         }else{
           //Caso alvo esteja a direita de obstaculo
-          angleAssist -= 0.35;
+          angleAssist -= 0.5;
         }
       }
 
@@ -145,5 +148,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     //Caso nao haja mais obstaculos, percorrer ate novo alvo
     this.obstBlocking = false;
     return target;
+  }
+
+  //Metodo para repor posicao do inimigo
+  resetPosition(){
+    this.body.position = new Phaser.Math.Vector2(this.xInicial,this.yInicial)
   }
 }

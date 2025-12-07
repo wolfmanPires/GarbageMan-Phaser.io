@@ -1,8 +1,14 @@
 export default class Trash extends Phaser.Physics.Arcade.Sprite {
-  //Dados para a criacao dos objetos do inimigos
-  constructor(scene) {
+  //Dados para a criacao dos objetos do lixo
+  constructor(scene,type) {
     //Implem. na Scene
-    super(scene,0,0,'trash');
+    if(type==1){
+      super(scene,0,0,'trash-green');
+    }else if(type==2){
+      super(scene,0,0,'trash-yellow');
+    }else{
+      super(scene,0,0,'trash-blue');
+    }
     this.scene = scene;
     this.x = Phaser.Math.Between(100,1170);
     this.y = Phaser.Math.Between(100,620);
@@ -12,6 +18,9 @@ export default class Trash extends Phaser.Physics.Arcade.Sprite {
     //Implem. das variaveis de colisao
     this.setScale(1);
     this.body.setCollideWorldBounds(true);
+
+    //Para verificar os tipos de lixo
+    this.type = type;
   }
 
   update(){
