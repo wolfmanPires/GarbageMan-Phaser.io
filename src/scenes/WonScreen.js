@@ -41,6 +41,10 @@ export class WonScreen extends Phaser.Scene {
     this.winTheme = this.sound.add('winTheme');
     this.winTheme.play();
     this.winTheme.setLoop(true);
+    this.infoText = this.add.text(800,680,"Duarte Pires - ECGM - Nº 29999", {
+      fontSize: "24px",
+      fill: "#fff"
+    });
   }
 
   update(){

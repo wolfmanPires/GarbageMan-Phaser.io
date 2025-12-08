@@ -41,9 +41,15 @@ export class Start extends Phaser.Scene {
         if(this.sound.getAll().length>0){
             if(this.sound.getAll()[0].key!="startTheme"){ this.sound.removeAll(); }
         }
-        this.startTheme = this.sound.add('startTheme');
+        if(this.sound.getAll().length==0){
+            this.startTheme = this.sound.add('startTheme');
+        }
         this.startTheme.play();
         this.startTheme.setLoop(true);
+        this.infoText = this.add.text(800,680,"Duarte Pires - ECGM - Nº 29999", {
+      fontSize: "24px",
+      fill: "#fff"
+    });
     }
 
     update() {

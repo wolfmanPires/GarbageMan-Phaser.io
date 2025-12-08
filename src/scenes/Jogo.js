@@ -45,15 +45,19 @@ export class Jogo extends Phaser.Scene {
     //Texto para pontuacao, vidas e trazer lixo errado
     this.scoreText = this.add.text(1270-220,16,"Pontos: "+this.score, {
       fontSize: "32px",
-      fill: "#000"
+      fill: "#fff"
     });
     this.livesText = this.add.text(32,16,"Vidas: "+this.player.lives, {
       fontSize: "32px",
-      fill: "#000"
+      fill: "#fff"
     });
     this.wrongTypeText = this.add.text(250,360,this.wrongType, {
       fontSize: "32px",
       fill: "#f00"
+    });
+    this.infoText = this.add.text(800,680,"Duarte Pires - ECGM - Nº 29999", {
+      fontSize: "24px",
+      fill: "#fff"
     });
   }
 

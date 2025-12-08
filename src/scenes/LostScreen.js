@@ -41,6 +41,10 @@ export class LostScreen extends Phaser.Scene {
     this.loseTheme = this.sound.add('loseTheme');
     this.loseTheme.play();
     this.loseTheme.setLoop(true);
+    this.infoText = this.add.text(800,680,"Duarte Pires - ECGM - Nº 29999", {
+      fontSize: "24px",
+      fill: "#fff"
+    });
   }
 
   update(){

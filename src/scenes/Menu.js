@@ -47,7 +47,7 @@ export class Menu extends Phaser.Scene {
     this.add.sprite(550,310,"bin-green").setScale(1.5);
     this.add.sprite(1000,310,"bin-yellow").setScale(1.5);
 
-    const subText = this.add.text(80,440,"Quando reciclares 10 vezes, podes passar ao próximo nivel! Mas cuidado!\n"+
+    const subText = this.add.text(80,420,"Quando reciclares 10 vezes, podes passar ao próximo nivel! Mas cuidado!\n"+
         "Uma lesma está a tentar-te parar para ela comer o lixo!", {
         fontSize: "18px",
         fill: "#000"
@@ -59,7 +59,16 @@ export class Menu extends Phaser.Scene {
       repeat: -1
     });
 
-    this.enemy = this.add.sprite(920, 450, "enemy-sprites").setScale(2);
+    this.enemy = this.add.sprite(930, 430, "enemy-sprites").setScale(2);
+    this.infoText = this.add.text(800,680,"Duarte Pires - ECGM - Nº 29999", {
+      fontSize: "24px",
+      fill: "#fff"
+    });
+    const inputText = this.add.text(80,490,"Para andares pelo mapa, usa as teclas WASD, e para apanhar o lixo é só aproximares-te dele!\n"+
+        "Para deitares o lixo fora, tens de ir para o ecoponto certo, senão não deitas o lixo fora!", {
+        fontSize: "18px",
+        fill: "#000"
+    });
   }
 
   update(){
