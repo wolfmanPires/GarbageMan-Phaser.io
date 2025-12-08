@@ -5,6 +5,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     super(scene,x,y,'player-sprites');
     scene.add.existing(this);
     scene.physics.add.existing(this);
+    this.bonkSound = scene.sound.add('bonk');
 
     //Implem. das cariaveis de movimento
     this.speed = 10;
@@ -67,11 +68,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   //Metodo para quando se perde uma vida
   loseLife(){
+    this.bonkSound.play();
     this.lives -= 1;
     //Caso fique sem vidas
     if(this.lives <= 0){
       this.scene.score=0;
-      this.scene.scene.restart();
+      this.scene.scene.stop("Jogo");
+      this.scene.scene.start("LostScreen");
     }
   }
 }

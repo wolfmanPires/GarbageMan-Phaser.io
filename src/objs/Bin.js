@@ -33,5 +33,6 @@ export default class Bin extends Phaser.Physics.Arcade.Sprite {
     this.scene.player.clearTrash();
     this.scene.score++;
     trash.destroy();
+    this.scene.newTrash();
   }
 }

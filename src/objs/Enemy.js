@@ -5,8 +5,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     super(scene,x,y,'enemy-sprites');
     scene.add.existing(this);
     scene.physics.add.existing(this);
+    this.spring = scene.sound.add('spring');
 
-    //Implem. das cariaveis de movimento
+    //Implem. das variaveis de movimento
     this.xInicial = x;
     this.yInicial = y;
     this.player = player;
@@ -25,6 +26,17 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.gameWidth = 1270;
     this.gameHeight = 720;
     this.reSearchTimer = 0;
+
+    //Implem. das variaveis de armadilhas
+    this.trapTimer = 500;
+    this.trapSetTimer = 300;
+    this.hasTrap = false;
+    this.trap;
+    this.trapSet = false;
+    this.attack;
+    this.setAttack = false;
+    this.attackTimer = 100;
+    this.attackLifespan = 100;
   }
 
   //Dados processados a cada tick do jogo
@@ -52,9 +64,28 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }else{
       angleRad = Math.atan2(playerBody.position.y-body.position.y,playerBody.position.x-body.position.x);
     }
-    //angleRad = Math.atan2(playerBody.position.y-body.position.y,playerBody.position.x-body.position.x);
     body.velocity.x += this.speed*Math.cos(angleRad); body.velocity.y += this.speed*Math.sin(angleRad);
     this.anims.play('enemyAnim',true);
+    
+    //Sistema de logica para as armadilhas aparecerem
+    if(this.trapTimer != 0 && !this.hasTrap){
+      this.trapTimer--;
+    }else if(this.trapTimer == 0 && !this.hasTrap){
+      this.setTrap();
+    }else if(this.hasTrap && this.trapSetTimer != 0 && !this.trapSet){
+      this.trapSetTimer--;
+    }else if(this.hasTrap && this.trapSetTimer == 0 && !this.trapSet){
+      this.trapSet = true;
+      this.armedTrap();
+    }else if(this.setAttack && this.attackTimer!=0){
+      this.attackTimer--;
+    }else if(this.setAttack && this.attackTimer==0){
+      this.createAttack();
+    }else if(!this.setAttack && this.attackTimer==0 && this.attackLifespan!=0){
+      this.attackLifespan--;
+    }else if(this.attackLifespan==0){
+      this.resetTraps();
+    }
   }
   
   //Metodo para refrescar os dados do jogador
@@ -153,5 +184,60 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
   //Metodo para repor posicao do inimigo
   resetPosition(){
     this.body.position = new Phaser.Math.Vector2(this.xInicial,this.yInicial)
+  }
+
+  //Metodo para criar uma armadilha
+  setTrap(){
+    this.hasTrap = true;
+    this.trapSet = false;
+    const trapX = Phaser.Math.Between(100,1170);
+    const trapY = Phaser.Math.Between(100,620);
+    this.trap = this.scene.add.sprite(trapX,trapY,"trap-marker");
+    this.scene.add.existing(this.trap);
+    this.scene.physics.add.existing(this.trap);
+    this.trap.body.immovable=true;
+    this.scene.physics.add.collider(this.obst, this.trap, function(r,s){
+      s.x = Phaser.Math.Between(100,1170)
+      s.y = Phaser.Math.Between(100,620)
+    });  
+    this.trap.anims.play('trapStart',true);
+  }
+
+  //Metodo para quando a armadilha fica armada e pronta para ser destruida
+  armedTrap(){
+    this.trapSet = true;
+    this.trap.anims.play('trapSet');
+    this.scene.physics.add.overlap(this.player, this.trap, function(r,s){
+      r.scene.enemy.setAttack = true;
+    });  
+  }
+
+  //Metodo para criar o ataque
+  createAttack(){
+    this.setAttack = false;
+    this.attack = this.scene.add.sprite(this.trap.x,this.trap.y,"attack");
+    this.scene.add.existing(this.attack);
+    this.scene.physics.add.existing(this.attack);
+    this.attack.body.immovable=true;
+    this.trap.anims.play('trapGone');
+    this.attack.anims.play('attack',true);
+    this.spring.play();
+    this.scene.physics.add.overlap(this.player, this.attack, function(r,s){
+      r.loseLife();
+      r.scene.enemy.resetTraps();
+    });  
+  }
+
+  //Metodo para reiniciar todas as variaveis para o ataque
+  resetTraps(){
+    this.hasTrap = false;
+    this.trapSet = false;
+    this.setAttack = false;
+    this.trapTimer = 500;
+    this.trapSetTimer = 300;
+    this.attackTimer = 150;
+    this.attackLifespan = 100;
+    this.trap.destroy();
+    this.attack.destroy();
   }
 }

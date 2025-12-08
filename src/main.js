@@ -1,5 +1,8 @@
 import { Jogo } from './scenes/Jogo.js';
+import { LostScreen } from './scenes/LostScreen.js';
 import { Menu } from './scenes/Menu.js';
+import { Start } from './scenes/Start.js';
+import { WonScreen } from './scenes/WonScreen.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -18,8 +21,11 @@ const config = {
         }
     },
     scene: [
-        //Menu,
-        Jogo
+        Start,
+        Menu,
+        Jogo,
+        LostScreen,
+        WonScreen
     ],
     scale: {
         mode: Phaser.Scale.FIT,

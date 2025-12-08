@@ -1,8 +1,8 @@
 export default class Obst extends Phaser.Physics.Arcade.Sprite {
   //Dados para a criacao dos objetos do inimigos
-  constructor(scene,x,y) {
+  constructor(scene,x,y,sprite) {
     //Implem. na Scene
-    super(scene,x,y,'barra');
+    super(scene,x,y,sprite);
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
